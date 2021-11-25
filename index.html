@@ -12,10 +12,10 @@
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-  </script>
+    </script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-  </script>
+    </script>
 
   <!-- Bootstrap -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -43,11 +43,11 @@
 
 
     #map {
-      max-width: 95%;
-      height: 800px;
-      margin-top: 50px;
+      width: 1700px;
+      height: 900px;
+      margin-top: 20px;
       margin-right: auto;
-      margin-left: auto;
+      margin-left: 10px;
       margin-bottom: auto;
       align-items: center;
       position: relative;
@@ -107,7 +107,7 @@
         <a class="nav-item nav-link logged-out btn btn-lg" href="#" data-toggle="modal"
           data-target="#registratemodal">Regístrate</a>
       </div>
-      <span id="buttonAppear"> <a class="nav-item nav-link logged-in btn btn-lg" href="#" ></a> </span>
+      <span id="buttonAppear"> <a class="nav-item nav-link logged-in btn btn-lg" href="#"></a> </span>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <span id="buttonAppearAdd"><a class="nav-item nav-link logged-in btn btn-primary" href="#" data-toggle="modal"
@@ -268,39 +268,41 @@
         <div class="modal-header">
           <h5 class="modal-title" id="addReunionModalLabel">Agregar Reunión</h5>
         </div>
-        <div class="modal-body">
+        <div >
           <form id="formaAdd" autocomplete="off">
             <div class="row m-2">
-              <div class="col-12" hidden>
-                <p id="raccount"></p>
-                Buscar: <input id="autocomplete" class="form-control" placeholder="Ingresa tu domicilio"
-                  onFocus="geolocate()" type="text" autocomplete="off" />
-              </div>
               <input type="text" class="form-control" id="rnombre" required placeholder="Nombre (Obligatorio)">
             </div>
             <div class="modal-body">
-              <p>*Arrastra el marcador a la ubicacion donde sera tu reunion*</p>
-              <div id="mapCanvas">
-              </div>
-              <div class="latlong-view">
-                <p hidden><b>Latitude:</b> <span id="latitude_view"></span></p>
-                <p hidden><b>Longitude:</b> <span id="longitude_view"></span></p>
-              </div>
+              <textarea class="form-control" id="rdescripcion" rows="3" required placeholder="Descripcion"></textarea>
             </div>
-            <div class="row">
-              <div class="col-6">
-                <input type="submit" id="smitadd" class="btn btn-primary btn-block" value="Agregar">
-                <p class="error text-danger"></p>
-              </div>
-              <div class="col-6">
-                <button type="button" class="btn btn-secondary btn-danger btn-block" onclick="clearAdd()"
-                  data-dismiss="modal">Cancelar</button>
-              </div>
+            <div class="col-12">
+              <p id="raccount" hidden></p>
+              <input id="inputPlaces" class="form-control" placeholder="Escribe la direccion, y buscala usando las flechas arriba y abajo">
             </div>
-          </form>
         </div>
+        <!--<p>*Arrastra el marcador a la ubicacion donde sera tu reunion*</p> -->
+        <p></p>
+        <div id="mapCanvas">
+        </div>
+        <div class="latlong-view">
+          <p hidden><b>Latitude:</b> <span id="latitude_view"></span></p>
+          <p hidden><b>Longitude:</b> <span id="longitude_view"></span></p>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <input type="submit" id="smitadd" class="btn btn-primary btn-block" value="Agregar">
+            <p class="error text-danger"></p>
+          </div>
+          <div class="col-6">
+            <button type="button" class="btn btn-secondary btn-danger btn-block" onclick="clearAdd()"
+              data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+        </form>
       </div>
     </div>
+  </div>
   </div>
 
   <!-- Modal EnterReunion -->
@@ -404,9 +406,11 @@
 
   <script src="scripts/autorizacion.js"></script>
   <script src="scripts/index.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDHsXycoYXIZKYz21l6AYIf_bqYJknuj0&callback=iniciaMapa"
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDHsXycoYXIZKYz21l6AYIf_bqYJknuj0&libraries=places&callback=iniciaMapa"
     async defer></script>
-  // AIzaSyADjOfdGIg-7JiqjoTstMN9el4g-nLhxxA
+
+  <!-- AIzaSyADjOfdGIg-7JiqjoTstMN9el4g-nLhxxA -->
 </body>
 
 </html>

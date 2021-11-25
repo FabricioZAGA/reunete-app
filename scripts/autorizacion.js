@@ -200,11 +200,14 @@ formaAdd.addEventListener('submit', (e) => {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
 
+
+
     //Funcion que hace la insercion a firebase, usando los valores previamente mencionados.
     addEventListener('submit', (e) => {
         e.preventDefault();
         db.collection('reuniones').add({
             nombre: formaAdd['rnombre'].value,
+            descripcion: formaAdd['rdescripcion'].value,
             email: emails4,
             latitud: lat5,
             longitud: long5,
@@ -240,29 +243,36 @@ function iniciaMapasss() {
             lat: 21.152639,
             lng: -101.711598
         },
-        zoom: 15
+        zoom: 13
     });
 
-
-    //Agrega un marcador que se puede arrastrar en el mapa generado.
-    var markersito = new google.maps.Marker({
-        position: {
-            lat: 21.152639,
-            lng: -101.711598
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById('inputPlaces'), {
+        componentRestrictions: {
+            'country': ['mx']
         },
-        map: map,
-        draggable: true
-    });
+        fields: ['geometry', 'name'],
+        types: ['establishment'],
+    })
+    
+    /*
+        //Agrega un marcador que se puede arrastrar en el mapa generado.
+        var markersito = new google.maps.Marker({
+            position: {
+                lat: 21.152639,
+                lng: -101.711598
+            },
+            map: map,
+            draggable: true
+        });
 
-    //Agrega los valores obtenidos al arrastrar el marcador, guardandolos en las
-    //casillas de texto de latitud y longitud.
-    google.maps.event.addListener(markersito, 'dragend', function (event) {
-        var position = event.latLng;
-        lati.innerHTML = markersito.getPosition().lat() + "|";
-        lngu.innerHTML = markersito.getPosition().lng() + "|";
-        console.log(position);
-    });
-
+        //Agrega los valores obtenidos al arrastrar el marcador, guardandolos en las
+        //casillas de texto de latitud y longitud.
+        google.maps.event.addListener(markersito, 'dragend', function (event) {
+            var position = event.latLng;
+            lati.innerHTML = markersito.getPosition().lat() + "|";
+            lngu.innerHTML = markersito.getPosition().lng() + "|";
+            console.log(position);
+        });*/
 }
 
 //Llama la forma del modal de Borrar Reunion
@@ -642,6 +652,7 @@ function clearEnter() {
 
 //Funcion que permite limpiar las casillas de texto nombre
 const namaewasa = document.getElementById("namaewa");
-function clearname(){
+
+function clearname() {
     namaewasa.innerHTML = '';
-  }
+}
