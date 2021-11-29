@@ -32,13 +32,10 @@
       color: white
     }
 
-    #buttonAppear {
-      color: white;
-    }
+
 
     body {
       color: black;
-      background-image: url("img/walll.jpg");
     }
 
 
@@ -50,7 +47,6 @@
       margin-left: 10px;
       margin-bottom: auto;
       align-items: center;
-      position: relative;
     }
 
     #mapCanvas {
@@ -100,18 +96,35 @@
         <a class="nav-item nav-link logged-in" href="#" data-toggle="modal" data-target="#micuentamodal">Mi Cuenta</a>
         <a class="nav-item nav-link logged-in" href="#" data-toggle="modal" data-target="#micuentaReuniones">Mis
           Reuniones</a>
-        <a class="nav-item nav-link logged-in" href="#" data-toggle="modal" data-target="#enterreunionmodal">Entrar a
+        <a class="nav-item nav-link logged-in" href="#" data-toggle="modal" id="modaladd"
+          data-target="#enterreunionmodal">Entrar a
+          Reunion</a>
+        <a class="nav-item nav-link logged-in" href="#" data-toggle="modal" id="modalexit"
+          data-target="#exitreunionmodal" hidden>Salir de la
+          Reunion</a>
+        <a class="nav-item nav-link logged-in" href="#" data-toggle="modal" id="modalreuni"
+          data-target="#modifreunionmodal" hidden>Modificar
+          Reunion</a>
+        <a class="nav-item nav-link logged-in" href="#" data-toggle="modal" id="modaldrop"
+          data-target="#dropreunionmodal" hidden>Eliminar
           Reunion</a>
         <a class="nav-item nav-link logged-out btn btn-lg" href="#" data-toggle="modal"
           data-target="#ingresarmodal">Ingresar</a>
         <a class="nav-item nav-link logged-out btn btn-lg" href="#" data-toggle="modal"
           data-target="#registratemodal">Regístrate</a>
       </div>
-      <span id="buttonAppear"> <a class="nav-item nav-link logged-in btn btn-lg" href="#"></a> </span>
+      <div>
+        <span id="buttonAppear"> <a class="nav-item nav-link logged-out btn btn-lg" href="#" data-toggle="modal"></a>
+        </span>
+      </div>
+      <div>
+        <span id="buttonAppeared"> <a class="nav-item nav-link logged-out btn btn-lg" href="#" data-toggle="modal"></a>
+        </span>
+      </div>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <span id="buttonAppearAdd"><a class="nav-item nav-link logged-in btn btn-primary" href="#" data-toggle="modal"
-              data-target="#addreunionmodal" onclick="iniciaMapasss()" id="btnadd">Agregar Reunion</a></span>
+              data-target="#addreunionmodal" onclick="autocomplete()" id="btnadd">Agregar Reunion</a></span>
           <a class="nav-item nav-link logged-in btn btn-danger" href="#" id="salir" onclick="clearname()">Salir</a>
         </div>
       </div>
@@ -268,7 +281,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="addReunionModalLabel">Agregar Reunión</h5>
         </div>
-        <div >
+        <div>
           <form id="formaAdd" autocomplete="off">
             <div class="row m-2">
               <input type="text" class="form-control" id="rnombre" required placeholder="Nombre (Obligatorio)">
@@ -278,7 +291,10 @@
             </div>
             <div class="col-12">
               <p id="raccount" hidden></p>
-              <input id="inputPlaces" class="form-control" placeholder="Escribe la direccion, y buscala usando las flechas arriba y abajo">
+              <input id="inputPlaces" class="form-control"
+                placeholder="Escribe la direccion, y buscala usando las flechas arriba y abajo">
+              <button type="button" id="btnValidate" class="btn btn-secondary btn-success btn-block"
+                onclick="GetLatlong()">Validar</button>
             </div>
         </div>
         <!--<p>*Arrastra el marcador a la ubicacion donde sera tu reunion*</p> -->
@@ -286,12 +302,12 @@
         <div id="mapCanvas">
         </div>
         <div class="latlong-view">
-          <p hidden><b>Latitude:</b> <span id="latitude_view"></span></p>
-          <p hidden><b>Longitude:</b> <span id="longitude_view"></span></p>
+          <p ><b>Latitude:</b> <span id="latitude_view"></span></p>
+          <p ><b>Longitude:</b> <span id="longitude_view"></span></p>
         </div>
         <div class="row">
           <div class="col-6">
-            <input type="submit" id="smitadd" class="btn btn-primary btn-block" value="Agregar">
+            <input type="submit" id="smitadd" class="btn btn-primary btn-block" value="Agregar" hidden>
             <p class="error text-danger"></p>
           </div>
           <div class="col-6">
@@ -329,14 +345,48 @@
             </div>
           </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-danger" onclick="clearEnter()"
-            data-dismiss="modal">Cancelar</button>
-        </div>
       </div>
     </div>
   </div>
 
+  <!-- Modal ModifyReunion-->
+  <div class="modal fade" id="modifreunionmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modifReunionModalLabel">Modificar Reunión</h5>
+        </div>
+        <div class="modal-body">
+          <form id="formaMod" autocomplete="off">
+            <div class="row m-2">
+              <div class="col-12" id="correodrop" hidden>
+              </div>
+            </div>
+          
+          <div class="row m-2">
+            <input type="text" class="form-control" id="modnombre" required placeholder="Nombre (Obligatorio)">
+          </div>
+          <div class="modal-body">
+            <textarea class="form-control" id="moddescripcion" rows="3" required placeholder="Descripcion"></textarea>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <input type="submit" id="smitmod" style="margin-top: 10px;" class="btn btn-primary btn-block"
+                value="Modificar la reunión">
+              <p class="error text-danger"></p>
+            </div>
+          </div>
+        </form>
+        </div>
+        <!--
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-danger" data-dismiss="modal">Cancelar</button>
+        </div>
+        -->
+      </div>
+    </div>
+  </div>
 
   <!-- Modal DropReunion -->
   <div class="modal fade" id="dropreunionmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -361,7 +411,29 @@
             </div>
           </form>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal ExitReunion -->
+  <div class="modal fade" id="exitreunionmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exitreunionmodalLabel">Salir de la Reunión</h5>
+        </div>
+        <div class="modal-body">
+          <form id="formaMod" autocomplete="off">
+            <div class="row m-2">
+              <div class="col-12" id="correodrop" hidden>
+              </div>
+              <span>¡Deseas salir de la reunion!</span>
+            </div>
+          </form>
+        </div>
         <div class="modal-footer">
+          <input type="submit" id="smitdrops" class=" btn btn-primary" value="Aceptar" onclick="refreshPage()">
           <button type="button" class="btn btn-secondary btn-danger" data-dismiss="modal">Cancelar</button>
         </div>
       </div>
@@ -369,15 +441,36 @@
   </div>
 
   <!-- Mapa -->
-  <div>
-    <p hidden><span id="namaewa"></span></p>
-    <p hidden><b>Code: <span id="reu"></span></b></p>
-    <p hidden><b>Reunion:</b> <span id="viewcode"></span></p>
-    <p hidden><b>email:</b> <span id="viewemail"></span></p>
-    <div id="map">
+  <table>
+    <td>
       <div>
-      </div>
+        <div id="map">
+          <div>
+          </div>
+        </div>
+    </td>
+    <td id="tdInfo">
+    <td>
+      <tr>
+        <p><b>Reunion:</b> <span id="reunameReu"></span></p>
+      </tr>
+    </td>
+    <td>
+      <tr>
+      <p><b>Descripcion:</b> <span id="descripcionReu"></span></p>
+    </td>
     </div>
+    </td>
+  </table>
+
+
+  <div>
+    <p ><span id="namaewa"></span></p>
+    <p ><b>Code: <span id="reu"></span></b></p>
+    <p hidden><b>Reunion:</b> <span id="viewcode"></span></p>
+    <p ><b>email:</b> <span id="viewemail"></span></p>
+
+  </div>
   </div>
 
 
@@ -406,9 +499,8 @@
 
   <script src="scripts/autorizacion.js"></script>
   <script src="scripts/index.js"></script>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDHsXycoYXIZKYz21l6AYIf_bqYJknuj0&libraries=places&callback=iniciaMapa"
-    async defer></script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDHsXycoYXIZKYz21l6AYIf_bqYJknuj0&libraries=places&callback=iniciaMapa"></script>
 
   <!-- AIzaSyADjOfdGIg-7JiqjoTstMN9el4g-nLhxxA -->
 </body>

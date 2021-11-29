@@ -1,6 +1,7 @@
 const reu = document.getElementById('reu');
 const formaAct = document.getElementById("childpid");
 var cosname;
+
 //Funcion que se encarga de configurar el menu al momento de que el usuario inicia sesion o cierra la sesion.
 auth.onAuthStateChanged(user => {
 
@@ -8,8 +9,6 @@ auth.onAuthStateChanged(user => {
         //console.log('Usuario entró');
         configuraMenu(user);
         var name, email;
-
-
 
         name = user.displayName;
         email = user.email;
@@ -168,26 +167,41 @@ formaAdd.addEventListener('submit', (e) => {
     //Para despues insertarlo en firebase.
     var emails1 = document.getElementById("raccount");
     var emails2 = emails1.outerHTML;
-    var emails3 = emails2.substring("17")
-    var emails4 = emails3.substring("16", emails3.indexOf(','));
+    var emails3 = emails2.substring("24")
+    var emails4 = emails3.substring("19", emails3.indexOf(','));
     var emailinfo = document.getElementById("viewemail");
     emailinfo.innerHTML = emails4;
 
+    console.log("emails1: " + emails3);
+    console.log("emails2: " + emails4);
+    console.log("emails3: " + emails4);
 
     //Manda llamar la latitud de una casilla de texto, y lo transforma en una cadena de texto.
     //Para despues insertarlo en firebase.
     var lat1 = document.getElementById("latitude_view");
     var lat2 = lat1.outerHTML;
-    var lat3 = lat2.substring("17")
-    var lat4 = lat3.substring("8", lat3.indexOf('|'));
+    var lat3 = lat2.substring("25")
+    var lat4 = lat3.substring("10", lat3.indexOf('|'));
     var lat5 = lat4.toString();
+
+
+    //console.log("Latitud3: " + lat3);
+    //console.log("Latitud4: " + lat4);
+    //console.log("Latitud5: " + lat5);
+
+
     //Manda llamar la longitud de una casilla de texto, y lo transforma en una cadena de texto.
     //Para despues insertarlo en firebase.
     var long1 = document.getElementById("longitude_view");
     var long2 = long1.outerHTML;
-    var long3 = long2.substring("17")
-    var long4 = long3.substring("9", long3.indexOf('|'));
+    var long3 = long2.substring("26")
+    var long4 = long3.substring("11", long3.indexOf('|'));
     var long5 = long4.toString();
+
+
+    //console.log("Longitud4: " + long3);
+    //console.log("Longitud4: " + long4);
+    //console.log("Longitud5: " + long5);
 
     //Esta funcion crea aleatoriamente una cadena de numeros y letras
     //con un largo de caracteres, para la creacion del codigo de la reunion
@@ -226,6 +240,7 @@ formaAdd.addEventListener('submit', (e) => {
         buttonAppearAdd.innerHTML = '';
         //Vuelve a configurar el menu.
         configuraMenu(user);
+        refreshPage();
     })
 })
 
@@ -234,17 +249,8 @@ formaAdd.addEventListener('submit', (e) => {
 const lati = document.getElementById('latitude_view');
 const lngu = document.getElementById('longitude_view');
 
-//Permite iniciar el mapa en el modal de Agregar Reunion.
-function iniciaMapasss() {
-
-    //Agrega un nuevo mapa con un valor de centrado y un zoom.
-    var map = new google.maps.Map(document.getElementById('mapCanvas'), {
-        center: {
-            lat: 21.152639,
-            lng: -101.711598
-        },
-        zoom: 13
-    });
+//Permite iniciar el autocompletado de google places en el modal de Agregar Reunion.
+function autocomplete() {
 
     autocomplete = new google.maps.places.Autocomplete(document.getElementById('inputPlaces'), {
         componentRestrictions: {
@@ -253,27 +259,67 @@ function iniciaMapasss() {
         fields: ['geometry', 'name'],
         types: ['establishment'],
     })
-    
-    /*
-        //Agrega un marcador que se puede arrastrar en el mapa generado.
-        var markersito = new google.maps.Marker({
-            position: {
+
+}
+
+
+const btnValidate = document.getElementById('smitadd');
+const inputPlacess = document.getElementById('inputPlaces')
+//Permite iniciar el mapa en el modal de Agregar Reunion.
+function GetLatlong() {
+
+    if (inputPlacess != '') {
+        var place = autocomplete.getPlace();
+        //console.log(place.name);
+        var latlong = place.geometry.location;
+        let ltln = latlong.toString();
+        let ltln1 = ltln.substring(1);
+        let ltln2 = ltln1.substring(0, ltln1.length - 1);
+        let ltln3 = ltln2.substring(0, ltln2.indexOf(","))
+        let ltln4 = ltln2.substring(ltln2.indexOf(",") + 2)
+        var latiFinal = ltln3.toString();
+        var longiFinal = ltln4.toString();
+        //console.log("LatitLongit " + ltln2)
+        console.log("Lati " + latiFinal)
+        console.log("Longit " + longiFinal)
+        lati.innerHTML = latiFinal;
+        lngu.innerHTML = longiFinal;
+
+        //Agrega un nuevo mapa con un valor de centrado y un zoom.
+        var map = new google.maps.Map(document.getElementById('mapCanvas'), {
+            center: {
                 lat: 21.152639,
                 lng: -101.711598
             },
-            map: map,
-            draggable: true
+            zoom: 13
         });
 
-        //Agrega los valores obtenidos al arrastrar el marcador, guardandolos en las
-        //casillas de texto de latitud y longitud.
-        google.maps.event.addListener(markersito, 'dragend', function (event) {
-            var position = event.latLng;
-            lati.innerHTML = markersito.getPosition().lat() + "|";
-            lngu.innerHTML = markersito.getPosition().lng() + "|";
-            console.log(position);
-        });*/
+        if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+            btnValidate.hidden = false;
+        } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(17);
+            btnValidate.hidden = false;
+        }
+        var marker = new google.maps.Marker({
+            position: place.geometry.location,
+            map: map,
+            draggable: true,
+        });
+    } else {
+        console.log("Favor de agregar el punto de reunion");
+    }
+
+
+
 }
+
+
+
+
+
+
 
 //Llama la forma del modal de Borrar Reunion
 const formaDrop = document.getElementById('formaDrop');
@@ -296,7 +342,7 @@ formaDrop.addEventListener('submit', (e) => {
     //Se crea un arreglo para guarda la informacion del correo.
     arreglo = [];
     //Se crea un prompt para que el usuario confirme que quiere borrar la reunion.
-    var confir = prompt("Seguro que quieres borrar tu esta reunion: Escribe SI en caso de querer borrarla");
+    var confir = prompt("Seguro que quieres borrar esta reunion: Escribe SI en caso de querer borrarla");
     //S compara el valor obtenido del prompt para validar si el usuario quiere borrar la reunion.
     if (confir == "SI" || confir == "si" || confir == "Si" || confir == "sI") {
         //Se obtiene la informacion de firebase.
@@ -342,7 +388,11 @@ formaDrop.addEventListener('submit', (e) => {
                         formaDrop.reset();
                         formaDrop.querySelector('.error').innerHTML = '';
                         alert("Reunion eliminada con exito");
+                        $('#modifreunionmodal').modal('hide');
+                        formaDrop.reset();
+                        formaDrop.querySelector('.error').innerHTML = '';
                         buttonAppear.innerHTML = '';
+                        buttonAppeared.innerHTML = '';
                         formaAct.innerHTML = '';
                         configuraMenu(user);
                     } else {
@@ -371,6 +421,7 @@ const longit = document.getElementById('longi');
 var mapita = document.getElementById("map");
 var codigo = document.getElementById('codigo');
 var buttonAppear = document.getElementById('buttonAppear');
+var buttonAppeared = document.getElementById('buttonAppeared');
 var codigosi = document.getElementById('reu');
 const namaewass = document.getElementById("namaewa");
 //Funcion de la forma Entrar Reunion
@@ -387,6 +438,7 @@ formaEnter.addEventListener('submit', (e) => {
     arrayemail = [];
     arregloname = [];
     arraymaili = []
+    arreglodescricion = []
     //Variables que guardaran el correo.
     var ema, ema2, ema3;
     //variable que guardara el nombre de la reunion.
@@ -418,6 +470,19 @@ formaEnter.addEventListener('submit', (e) => {
         })
     })
 
+
+    const modalreuni = document.getElementById('modalreuni');
+    const modaldrop = document.getElementById('modaldrop');
+    const modalexit = document.getElementById('modalexit');
+    const modaladd = document.getElementById('modaladd');
+
+    const moddescripcion = document.getElementById('moddescripcion');
+    const modnombre = document.getElementById('modnombre');
+    const nameReu = document.getElementById('nameReu');
+    const emailReu = document.getElementById('emailReu');
+    const codeReu = document.getElementById('codeReu');
+    const reunameReu = document.getElementById('reunameReu');
+    const descripcionReu = document.getElementById('descripcionReu');
     //Se obtiene el codgio de la forma de Entrar reunion
     var codigos = formaEnter['codigo'].value
     //Se compara que el codigo no sea nulo.
@@ -441,12 +506,16 @@ formaEnter.addEventListener('submit', (e) => {
                     datas4 = {
                         "nombre": doc.data().nombre
                     };
+                    datas5 = {
+                        "descripcion": doc.data().descripcion
+                    }
                 });
                 //Se agrega la informacion obtenida a los arreglos
                 array1.push(data1);
                 array2.push(data2);
                 arrayemail.push(data3)
                 arregloname.push(datas4);
+                arreglodescricion.push(datas5);
 
                 //Se transforman las variables de longitud a Float para poder mandarlas a un marcador.
                 var array3 = parseFloat(array1[0].latitud);
@@ -454,6 +523,18 @@ formaEnter.addEventListener('submit', (e) => {
 
                 //Se guarda el correo.
                 arraymaili = arrayemail[0].correo;
+                arrayname = arregloname[0].nombre;
+                arraydescrip = arreglodescricion[0].descripcion;
+
+                //console.log("nombre: " + arrayname);
+                //console.log("email: " + arraymaili);
+                //console.log("descripcion: " + arraydescrip);
+                //console.log("lati: " + array3);
+                //console.log("longi: " + array4);
+
+                reunameReu.innerHTML = arrayname;
+                descripcionReu.innerHTML = arraydescrip;
+                moddescripcion.innerHTML = arraydescrip;
 
 
                 //Se limpia el mapa para poner el nuevo.
@@ -467,7 +548,7 @@ formaEnter.addEventListener('submit', (e) => {
                         lat: 21.152639,
                         lng: -101.711598
                     },
-                    zoom: 12
+                    zoom: 13
 
                 };
 
@@ -520,7 +601,7 @@ formaEnter.addEventListener('submit', (e) => {
 
 
                 //Se crea un marcador.
-                var marker = new google.maps.Marker({
+                var markerYou = new google.maps.Marker({
                     position: {
                         lat: 0,
                         lng: 0
@@ -534,14 +615,83 @@ formaEnter.addEventListener('submit', (e) => {
 
                 //Se crea una variable nula.
                 var watchId = null;
+                //console.log("Llego aqui")
 
                 //Se crean las opciones para el marcador en teimpo real.
                 var positionOptions = {
                     enableHighAccuracy: true,
                     timeout: 10 * 1000, //10 segundos
                     maximumAge: 30 * 1000 //30 segundos
+
                 };
 
+
+
+
+                //Creacion variable para almacenar info de marcador
+                informacion = new google.maps.InfoWindow;
+                //console.log("Llego aqui1")
+                //Obtenes la geolocalizacion del navegador.
+                if (navigator.geolocation) {
+
+                    //Se toma la variable para la localizacion en tiempo real, 
+                    //y se le agrega la funcion de tiempo real.
+                    watchId = navigator.geolocation.watchPosition(function (position) {
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+                        //console.log("Llego aqui2")
+                        console.log(position);
+
+                        var posit = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        }
+
+
+                        //Se agrega el marcador.
+                        markerYou.setPosition(new google.maps.LatLng(lat, lng));
+                        map.panTo(new google.maps.LatLng(lat, lng))
+                        informacion.setPosition(posit);
+                        informacion.setContent(namaewa1);
+                        //console.log("anem " + namaewa1);
+                        informacion.open(map);
+                        //console.log("Llego aqui3")
+
+                        var directionsService = new google.maps.DirectionsService;
+                        var directionsDisplay = new google.maps.DirectionsRenderer;
+
+                        //call renderer to display directions
+                        directionsDisplay.setMap(map);
+
+                        var bounds = new google.maps.LatLngBounds();
+                        //        var mapOptions = {
+                        //            mapTypeId: 'roadmap'
+                        //        };
+                        directionsService.route({
+                            // origin: document.getElementById('start').value,
+                            origin: posit,
+
+                            // destination: marker.getPosition(),
+                            destination: {
+                                lat: array3,
+                                lng: array4
+                            },
+                            travelMode: 'DRIVING'
+                        }, function (response, status) {
+                            if (status === 'OK') {
+                                directionsDisplay.setDirections(response);
+                            } else {
+                                window.alert('Directions request failed due to ' + status);
+                            }
+                        });
+                    })
+                }
+
+
+
+
+                //Se obtiene el codigo.
+                values = codigo.value;
 
                 //Se obtienen los correos en 2 variables para compararlos
                 var viewemails = document.getElementById("viewemail");
@@ -553,69 +703,43 @@ formaEnter.addEventListener('submit', (e) => {
                 var emailss = emails.substring("10");
                 var emailsss = emailss.substring("0", emailss.indexOf('"'));
 
-                //Creacion variable para almacenar info de marcador
-                informacion = new google.maps.InfoWindow;
 
-                //Obtenes la geolocalizacion del navegador.
-                if (navigator.geolocation) {
+                try {
+                    //Se comparan las varibles obtenidas.
+                    if (emailsss == emas3) {
+                        //Oculta el modal de Entrar a Reunion.
+                        $('#enterreunionmodal').modal('hide');
+                        formaEnter.reset();
+                        formaEnter.querySelector('.error').innerHTML = '';
+                        alert("Entraste con exito a la reunion");
+                        reu.innerHTML = values;
+                        modalreuni.hidden = false;
+                        modaldrop.hidden = false;
+                        modalexit.hidden = false;
+                        modaladd.hidden = true;
+                        //Agrega un boton de eliminar si los correos son iguales.
+                        //buttonAppear.innerHTML = '<data-target="#modifreunionmodal" >Modificar reunion</a>'
+                        //buttonAppeared.innerHTML = '<data-target="#dropreunionmodal" >Borrar reunion</a>'
+                        //buttonAppear.innerHTML = '<a data-toggle="modal" onclick="refreshPage()">Salir Reunion</a>'
+                        formaAct.innerHTML = '';
+                        namaewass.innerHTML = '';
+                    } else {
+                        //Oculta el modal de Entrar a Reunion.
+                        $('#enterreunionmodal').modal('hide');
+                        formaEnter.reset();
+                        formaEnter.querySelector('.error').innerHTML = '';
+                        alert("Entraste con exito a la reunion");
+                        reu.innerHTML = values;
+                        modalexit.hidden = false;
+                        modaladd.hidden = true;
+                        //Agrega un boton de salir si los correos son diferentes.
+                        //buttonAppear.innerHTML = '<a data-toggle="modal" onclick="refreshPage()">Salir Reunion</a>'
+                        namaewass.innerHTML = '';
+                    }
+                } catch (err) {
 
-                    //Se toma la variable para la localizacion en tiempo real, 
-                    //y se le agrega la funcion de tiempo real.
-                    watchId = navigator.geolocation.watchPosition(function (position) {
-                        var lat = position.coords.latitude;
-                        var lng = position.coords.longitude;
-
-                        console.log(position);
-
-                        var posit = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        }
-                        //Se obtienen las coordenadas.
-                        var coordenadas = lat + ',' + lng;
-
-
-                        //Se agrega el marcador.
-                        marker.setPosition(new google.maps.LatLng(lat, lng));
-                        map.panTo(new google.maps.LatLng(lat, lng))
-                        informacion.setPosition(posit);
-                        informacion.setContent(namaewa1);
-                        console.log("anem " + namaewa1);
-                        informacion.open(map);
-
-                    })
+                    console.log("Verificar bien el codigo de la reunion" + err)
                 }
-
-                //Se obtiene el codigo.
-                values = codigo.value;
-
-
-
-
-                //Se comparan las varibles obtenidas.
-                if (emailsss == emas3) {
-                    //Oculta el modal de Entrar a Reunion.
-                    $('#enterreunionmodal').modal('hide');
-                    formaEnter.reset();
-                    formaEnter.querySelector('.error').innerHTML = '';
-                    alert("Entraste con exito a la reunion eliminar");
-                    reu.innerHTML = values;
-                    //Agrega un boton de eliminar si los correos son iguales.
-                    buttonAppear.innerHTML = '<a data-toggle="modal" data-target="#dropreunionmodal" >Borrar reunion</a>'
-                    formaAct.innerHTML = '';
-                    namaewass.innerHTML = '';
-                } else {
-                    //Oculta el modal de Entrar a Reunion.
-                    $('#enterreunionmodal').modal('hide');
-                    formaEnter.reset();
-                    formaEnter.querySelector('.error').innerHTML = '';
-                    alert("Entraste con exito a la reunion salir");
-                    reu.innerHTML = values;
-                    //Agrega un boton de salir si los correos son diferentes.
-                    buttonAppear.innerHTML = '<a data-toggle="modal" onclick="refreshPage()">Salir Reunion</a>'
-                    namaewass.innerHTML = '';
-                }
-
             });
         } else {
             console.log("Sabe");
@@ -655,4 +779,161 @@ const namaewasa = document.getElementById("namaewa");
 
 function clearname() {
     namaewasa.innerHTML = '';
+}
+
+
+
+
+
+//Llama la forma del modal de Borrar Reunion
+const formaMod = document.getElementById('formaMod');
+//Llama el codigo de la reunion actual
+var codigosMod = document.getElementById('reu');
+const nameR = document.getElementById('reunameReu');
+
+
+//Funcion de la forma que permite borrar una reunion.
+formaMod.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    //Llama al usuario autenticado.
+    var user = firebase.auth().currentUser;
+    //Manda llamar el codigo de la reunion de la casilla de texto y lo convierte en una cadena.
+    var codigos1 = codigosMod.outerHTML;
+    var codigos2 = codigos1.substring("15")
+    var codigos3 = codigos2.substring("0", codigos2.indexOf('<'));
+
+    //Se crean variables para guardar el email en estas.
+    var em1, em2, em3;
+    var lat1, lat2, lat3;
+    var long1, long2, long3;
+    var id1, id2, id3;
+    //Se crea un arreglo para guarda la informacion del correo.
+    arreglo = [];
+    arreglolong = [];
+    arreglolat = [];
+    arregloid = [];
+    //Se crea un prompt para que el usuario confirme que quiere borrar la reunion.
+    var confir = prompt("Seguro que quieres modficiar esta reunion: Escribe SI en caso de querer modificarla");
+    //Se compara el valor obtenido del prompt para validar si el usuario quiere borrar la reunion.
+    if (confir == "SI" || confir == "si" || confir == "Si" || confir == "sI") {
+        //Se obtiene la informacion de firebase.
+        db.collection('reuniones').get().then(doc => {
+            doc.docs.forEach(doc => {
+                //Se compara que el codigo que ingreso el usuario si exista en firebase.
+                if (doc.data().codigo == codigos3) {
+                    data = {
+                        "email": doc.data().email,
+                    };
+                    datalat = {
+                        "latitud": doc.data().latitud,
+                    };
+                    datalong = {
+                        "longitud": doc.data().longitud,
+                    };
+                    dataid = {
+                        "id": doc.data().id,
+                    }
+                    //Se inserta la informacion en el arreglo.
+                    arreglo.push(data);
+                    arreglolat.push(datalat);
+                    arreglolong.push(datalong);
+                    arregloid.push(dataid);
+                    //Manda llamar el email guardado en el arreglo y lo convierte en una cadena.
+                    em1 = JSON.stringify(arreglo);
+                    em2 = em1.substring("11")
+                    em3 = em2.substring("0", em2.indexOf('"'))
+                    console.log("email: " + em3)
+
+
+                    lat1 = JSON.stringify(arreglolat);
+                    lat2 = lat1.substring("13")
+                    lat3 = lat2.substring("0", lat2.indexOf('"'))
+                    console.log("lat: " + lat3)
+
+                    long1 = JSON.stringify(arreglolong);
+                    long2 = long1.substring("14")
+                    long3 = long2.substring("0", long2.indexOf('"'))
+                    console.log("long: " + long3)
+
+                    id1 = JSON.stringify(arregloid);
+                    id2 = id1.substring("15")
+                    id3 = id2.substring("0", id2.indexOf('"'))
+                    console.log("id1: " + id1)
+                    console.log("id2: " + id2)
+                    console.log("id3: " + id3)
+                }
+            })
+
+            //Se compara que el usuario que quiere borrar la reunion
+            //Sea el usuario que la creo
+            if (user.email == em3) {
+
+
+                //Se revisa que el codigo no sea nulo.
+                if (codigo != null) {
+
+                    //Se crea una funcion que busque el codigo que se va a borrar en firebase
+                    //comparandolo con el que el usuario uso.
+                    var dele = db.collection("reuniones").where("codigo", "==", codigos3);
+
+                    //Se revisa que el codigo sea diferente de la variable.
+                    if (codigo != dele) {
+
+                        var name1 = document.getElementById("modnombre");
+                        var name2 = name1.value;
+
+                        var desc = document.getElementById("moddescripcion");
+                        var desc1 = desc.value;
+                        //console.log("Descripcion: " + desc1);
+
+                        try {
+
+                            dele.get().then(function (querySnapshot) {
+                                querySnapshot.forEach(function (docFun) {
+
+                                    //console.log(docFun.val());
+                                    docFun.ref.update({
+                                        "nombre": name2,
+                                        "descripcion": desc1
+                                    });
+                                });
+
+                            });
+                        } catch {
+
+                        }
+                        //Oculta el modal del Borrar Reunion.
+
+                        $('#modifreunionmodal').modal('hide');
+                        formaDrop.reset();
+                        formaDrop.querySelector('.error').innerHTML = '';
+                        buttonAppear.innerHTML = '';
+                        buttonAppeared.innerHTML = '';
+                        formaAct.innerHTML = '';
+                        configuraMenu(user);
+                        timer();
+
+
+
+                    } else {
+                        //En caso de que el codigo no sea diferente.
+                    }
+                } else {
+                    //En caso de que el codigo no sea diferente que nulo.
+                }
+            } else {
+                //En caso de no ser el que creo la reunion.
+                alert("Tienes que ser el creador de esta reunion para poder modificarla");
+            }
+        })
+    } else {
+        //En caso de no aceptar borrar la reunion. 
+        alert("Intenta modificarla cuando estes seguro de querer hacerlo.");
+    }
+})
+
+function timer() {
+    alert("Reunion modificada con exito, se finalizara la sesion con la reunion actual");
+    setTimeout(refreshPage, 3000)
 }

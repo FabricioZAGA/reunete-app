@@ -114,70 +114,70 @@
 
    //Se crea el mapa con sus propiedades.
    var map = new google.maps.Map(mapa, propiedades);
+   /*
+      //Se crea un icono a mostrar en el mapa.
+      var icono = {
+        url: "./img/stick.png",
+        scaledSize: new google.maps.Size(25, 25),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 0)
+      };
 
-   //Se crea un icono a mostrar en el mapa.
-   var icono = {
-     url: "./img/stick.png",
-     scaledSize: new google.maps.Size(25, 25),
-     origin: new google.maps.Point(0, 0),
-     anchor: new google.maps.Point(0, 0)
-   };
+      //Se crea un marcador que tendra el icono que se mostrara, aqui se insertaran las coordenadas.
+      var marker = new google.maps.Marker({
+        position: {
+          lat: 0,
+          lng: 0
+        },
+        icon: icono,
+        map: map
+      });
 
-   //Se crea un marcador que tendra el icono que se mostrara, aqui se insertaran las coordenadas.
-   var marker = new google.maps.Marker({
-     position: {
-       lat: 0,
-       lng: 0
-     },
-     icon: icono,
-     map: map
-   });
-
-   //Se crea una variable nula, para la ubiccion en tiempo real.
-   var watchId = null;
+      //Se crea una variable nula, para la ubiccion en tiempo real.
+      var watchId = null;
 
 
-   //Se crean las variables de recarga del WatchPosition.
-   var positionOptions = {
-     enableHighAccuracy: true,
-     timeout: 5 * 1000, //5 segundos
-     maximumAge: 30 * 1000 //30 segundos
-   };
+      //Se crean las variables de recarga del WatchPosition.
+      var positionOptions = {
+        enableHighAccuracy: true,
+        timeout: 5 * 1000, //5 segundos
+        maximumAge: 30 * 1000 //30 segundos
+      };
 
-   //Creacion variable para almacenar info de marcador
-   informacion = new google.maps.InfoWindow;
+      //Creacion variable para almacenar info de marcador
+      informacion = new google.maps.InfoWindow;
 
-   //Se obtienen las coordenadas del navegador.
-   if (navigator.geolocation) {
+      //Se obtienen las coordenadas del navegador.
+      if (navigator.geolocation) {
 
-     //Se agregan las coordenas al  WatchPosition .
-     watchId = navigator.geolocation.watchPosition(function (position) {
-       var lat = position.coords.latitude;
-       var lng = position.coords.longitude;
+        //Se agregan las coordenas al  WatchPosition .
+        watchId = navigator.geolocation.watchPosition(function (position) {
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
 
-       console.log(position);
+          console.log(position);
 
-       var pos = {
-         lat: position.coords.latitude,
-         lng: position.coords.longitude
-       }
-       //Se guardan la coordenadas obtenidas.
-       var coordenadas = lat + ',' + lng;
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+          //Se guardan la coordenadas obtenidas.
+          var coordenadas = lat + ',' + lng;
 
-       //Se implementan las coordenadas en el marcador
-       marker.setPosition(new google.maps.LatLng(lat, lng));
-       informacion.setPosition(pos);
-       informacion.setContent(cosiem);
-       informacion.open(map);
-       map.panTo(new google.maps.LatLng(lat, lng));
+          //Se implementan las coordenadas en el marcador
+          marker.setPosition(new google.maps.LatLng(lat, lng));
+          //informacion.setPosition(pos);
+          //informacion.setContent(cosiem);
+          informacion.open(map);
+          map.panTo(new google.maps.LatLng(lat, lng));
 
-     }, error, positionOptions);
-   }
+        }, error, positionOptions);
+      }
 
-   //Error para obtener la posicion.
-   function error(positioError) {
-     //console.log(positioError.messsage);
-   }
+      //Error para obtener la posicion.
+      function error(positioError) {
+        //console.log(positioError.messsage);
+      }*/
  }
 
  //Funcion que permite refrescar la pagina
