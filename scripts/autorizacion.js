@@ -167,8 +167,8 @@ formaAdd.addEventListener('submit', (e) => {
     //Para despues insertarlo en firebase.
     var emails1 = document.getElementById("raccount");
     var emails2 = emails1.outerHTML;
-    var emails3 = emails2.substring("24")
-    var emails4 = emails3.substring("19", emails3.indexOf(','));
+    var emails3 = emails2.substring("17")
+    var emails4 = emails3.substring("26", emails3.indexOf(','));
     var emailinfo = document.getElementById("viewemail");
     emailinfo.innerHTML = emails4;
 
@@ -229,11 +229,12 @@ formaAdd.addEventListener('submit', (e) => {
         });
 
         //Permite que la forma modal se cierre automaticamente
-        //al mostrar una alerta.
+        //al mostrar una alerta.   
+        alert("Reunion creada con exito");
         $('#addreunionmodal').modal('hide');
         formaAdd.reset();
         formaAdd.querySelector('.error').innerHTML = '';
-        alert("Reunion creada con exito");
+
         //Vacia el modal de la reunion, la forma del modal y el boton.
         addReunionModalLabel.innerHTML = '';
         formaAct.innerHTML = '';
@@ -785,14 +786,14 @@ function clearname() {
 
 
 
-//Llama la forma del modal de Borrar Reunion
+//Llama la forma del modal de MOodificar Reunion
 const formaMod = document.getElementById('formaMod');
 //Llama el codigo de la reunion actual
 var codigosMod = document.getElementById('reu');
 const nameR = document.getElementById('reunameReu');
 
 
-//Funcion de la forma que permite borrar una reunion.
+//Funcion de la forma que permite modficar una reunion.
 formaMod.addEventListener('submit', (e) => {
     e.preventDefault();
 
