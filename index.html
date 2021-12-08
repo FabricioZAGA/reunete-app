@@ -36,6 +36,7 @@
 
     body {
       color: black;
+      background-color: grey;
     }
 
 
@@ -123,8 +124,9 @@
       </div>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
         <div class="navbar-nav">
+         <span  class="text-light mr-5 mt-1 nav-item logged-in" style="font-size: 1.2rem"> Bienvenido: <a id="namaewa"></a> </span>
           <span id="buttonAppearAdd"><a class="nav-item nav-link logged-in btn btn-primary" href="#" data-toggle="modal"
-              data-target="#addreunionmodal" onclick="autocomplete()" id="btnadd">Agregar Reunion</a></span>
+              data-target="#addreunionmodal" onclick="autocomplete()" id="btnadd">Agregar Reunión</a></span>
           <a class="nav-item nav-link logged-in btn btn-danger" href="#" id="salir" onclick="clearname()">Salir</a>
         </div>
       </div>
@@ -164,12 +166,12 @@
                 <p class="error text-danger"></p>
               </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-12 text-center">
                 <span onclick="entrarGoogle()" id="btnGmail" class="btn btn-primary btn-danger btn-block">Continuar con
                   Gmail <i class="fas fa-plus"></i></span>
               </div>
-            </div>
+            </div> -->
           </form>
         </div>
         <div class="modal-footer">
@@ -195,22 +197,22 @@
           <form id="formaregistrate" autocomplete="off">
             <div class="row m-2">
               <div class="col-12">
-                <input type="text" class="form-control" id="rnombres" required placeholder="Name">
+                <input type="text" class="form-control" id="rnombres" required placeholder="Nombre">
               </div>
             </div>
             <div class="row m-2">
               <div class="col-12">
-                <input type="email" class="form-control" id="rcorreo" required placeholder="Email">
+                <input type="email" class="form-control" id="rcorreo" required placeholder="Correo">
               </div>
             </div>
             <div class="row m-2">
               <div class="col-12">
-                <input type="email" class="form-control" id="r2correo" required placeholder="Email confirm">
+                <input type="email" class="form-control" id="r2correo" required placeholder="Confirma Correo">
               </div>
             </div>
             <div class="row m-2">
               <div class="col-12">
-                <input type="text" class="form-control" id="rcontrasena" required placeholder="Paswword">
+                <input type="text" class="form-control" id="rcontrasena" required placeholder="Contraseña">
               </div>
             </div>
             <div class="row text-center">
@@ -299,7 +301,7 @@
         </div>
         <!--<p>*Arrastra el marcador a la ubicacion donde sera tu reunion*</p> -->
         <p></p>
-        <div id="mapCanvas">
+        <div id="mapCanvas" >
         </div>
         <div class="latlong-view">
           <p hidden><b>Latitude:</b> <span id="latitude_view"></span></p>
@@ -439,38 +441,40 @@
       </div>
     </div>
   </div>
+  <!-- <div>
+    
+    <p hidden><b>Reunion:</b> <span id="viewcode"></span></p>
+
+  </div> -->
 
   <!-- Mapa -->
-  <table>
+  <table class="mx-auto ">
     <td>
       <div>
-        <div id="map">
-          <div>
-          </div>
+        <div id="map" >
         </div>
     </td>
     <td id="tdInfo">
     <td>
       <tr>
-        <p><b>Reunion:</b> <span id="reunameReu"></span></p>
+        <p class="pl-5 logged-in"><b style="font-size: 1.2rem">Reunión:</b> <span id="reunameReu"></span></p>
       </tr>
     </td>
     <td>
       <tr>
-      <p><b>Descripcion:</b> <span id="descripcionReu"></span></p>
+        <p class="pl-5 logged-in"><b style="font-size: 1.2rem">Código: <span id="reu"></span></b></p>
+      </tr>
+    </td>
+    <td>
+      <tr>
+      <p class="pl-5 logged-in"><b style="font-size: 1.2rem">Descripción:</b> <span id="descripcionReu"></span></p>
     </td>
     </div>
     </td>
   </table>
 
 
-  <div>
-    <p ><span id="namaewa"></span></p>
-    <p ><b>Code: <span id="reu"></span></b></p>
-    <p hidden><b>Reunion:</b> <span id="viewcode"></span></p>
-    <p ><b>email:</b> <span id="viewemail"></span></p>
 
-  </div>
   </div>
 
 
